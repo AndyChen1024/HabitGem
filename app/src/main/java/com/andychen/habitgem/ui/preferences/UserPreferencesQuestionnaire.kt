@@ -81,6 +81,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.andychen.habitgem.domain.model.GoalType
 import com.andychen.habitgem.domain.model.HabitCategory
+import com.andychen.habitgem.domain.model.TimeSlot
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter

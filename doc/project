@@ -1,0 +1,150 @@
+# Project Context
+# Inspired by Google's Now in Android (NIA) Official Sample
+
+## 1. Overview
+
+This project is **inspired by the Now in Android (NIA) official Google sample**, and follows its modern Android architecture and best practices.
+- Written in **Kotlin**
+- Follows [Modern Android Development (MAD)](https://developer.android.com/modern-android-development)
+- Uses **Jetpack Compose**, **MVVM**, **Hilt** (DI), **Coroutines**, **Flow**, **Room**, **Modularization**, and **Material Design 3 (Material You)**
+- Designed for high-quality, scalable, testable, and maintainable code.
+
+## 2. Project Architecture
+
+- **Multi-module structure:**
+  - `core` modules for common logic and data (network, database, model)
+  - `feature` modules for each UI feature/vertical
+  - `app` module for app-level composition, navigation, DI, entry point
+- **MVVM** pattern in all feature modules
+- **Unidirectional Data Flow** using State and Event models
+- **Repository Pattern** for data abstraction
+- **Dependency Injection:** Use Hilt, strictly avoid manual ServiceLocator
+
+## 2.1 Layered Architecture
+
+| Layer  | Responsibility                                 | Typical Contents              |
+|--------|-----------------------------------------------|-------------------------------|
+| UI     | Render UI, handle user input, display state   | Compose screens, ViewModel    |
+| Domain | Business logic, use-cases, state transformation| UseCase, domain models        |
+| Data   | Data sources, caching, mapping, abstraction   | Repository, Room, network API |
+
+## 3. Technologies Used
+
+- **UI:** Jetpack Compose, Material3, Theming, Animations, Navigation-Compose
+- **DI:** Hilt (with @HiltAndroidApp), Module separation for DI providers
+- **Persistence:** Room, DataStore
+- **Networking:** Retrofit, OkHttp, kotlinx.serialization
+- **Concurrency:** Kotlin Coroutines, Flow for async/streaming
+- **Testing:** JUnit, Mockito/Kotlinx, Compose UI Test, Robolectric
+- **Other:** Modularization with Gradle Kotlin DSL
+
+## 4. Coding Guidelines
+
+- **Kotlin only** (no Java except for legacy integrations)
+- **Follow official Android Kotlin style guide**
+- **Sealed classes** for state/events/results
+- **Immutable state** (val, copy for data classes)
+- **Single source of truth** (Repository or ViewModel)
+- **No business logic in Composables**—use ViewModel
+- **Prefer Flow/StateFlow** over LiveData
+- **Use Compose theming system** for consistent UI
+- **Strict nullability, exhaustive when, prefer explicit types in public APIs**
+- **One ViewModel per feature screen**
+
+## 5. File and Module Structure (Example)
+
+项目整体采用分层分模块设计，参考 NIA 结构举例：
+
+```
+root/
+├── app/                  # Application module (entry point, navigation, DI)
+│   ├── src/
+│   ├── di/
+│   ├── navigation/
+│   └── theme/
+├── core/                 # Core modules (shared across features)
+│   ├── data/
+│   ├── network/
+│   ├── database/
+│   ├── model/
+│   └── common/
+├── feature/              # Feature modules（业务功能拆分）
+│   ├── home/
+│   ├── detail/
+│   ├── profile/
+│   └── settings/
+├── buildSrc/             # Build configuration, dependencies version management
+│   └── …
+├── .cursor/              # Cursor context, .mdc 文件存放位置
+│   └── context.mdc
+└── …
+```
+
+> - 每个 feature 都是独立 module，具备自己的 ViewModel、UI、di、data 层。
+> - core 模块存放基础、通用能力，不直接依赖业务模块。
+> - buildSrc 用于统一管理依赖版本。
+> - .cursor 目录存放上下文说明，供 Cursor/AI 工具引用。
+
+## 5.1 Add New Feature Module (Example)
+To add a new feature, create a module under `feature/` as per modular & MVVM guidelines.
+Structure:
+- `ui/` — Compose screens, ViewModel
+- `data/` — Repository, data sources, models
+- `domain/` — UseCase, business logic (optional)
+- `di/` — DI entry points for Hilt
+- `navigation/` — Destinations, NavGraph
+
+## 6. Naming Conventions
+
+- Module: `core-data`, `core-model`, `feature-home`, etc.
+- Class: `HomeViewModel`, `UserRepository`
+- Function: `getUser()`, `observeArticles()`
+- File: One top-level class/function per file
+
+## 7. Dependency Injection
+
+- Use Hilt modules for each feature/core module
+- Provide Repository/UseCase interfaces
+- Inject ViewModel via Hilt
+
+## 8. Navigation
+
+- Use [Navigation Compose](https://developer.android.com/jetpack/compose/navigation)
+- All routes and navigation logic are centralized
+- Each feature exposes its own navigation graph entry
+
+## 9. Testing
+
+- Unit test all business logic (Repository, UseCase, ViewModel)
+- UI tests for each Composable screen
+- Use fake/dummy data sources for testability
+
+## 9.1 Testing Directories
+- `src/test/` for unit tests (JVM)
+- `src/androidTest/` for instrumented tests (UI, integration)
+- Use fake/dummy repos for ViewModel/unit tests
+
+## 10. Example Reference Links
+
+- [Now in Android GitHub](https://github.com/android/nowinandroid)
+- [Android Official MAD Architecture](https://developer.android.com/modern-android-development)
+- [Google Compose Sample](https://github.com/android/compose-samples)
+
+## 11. Code Quality & Tooling
+- All code is linted via `ktlint`
+- Static analysis with `detekt`
+- Recommended: CI pipeline with Lint, Build, Test steps
+
+## 12. Deviations from NIA (If any)
+- List and explain any architecture/tech stack customizations here
+
+---
+
+**Cursor, please always refer to this context when suggesting, generating, or refactoring code.
+Prioritize practices and structures as outlined above.
+Never suggest Java, legacy Android APIs, or anti-patterns.
+Be concise and follow modern Android and Kotlin idioms.**
+---
+**Instructions for Cursor and all AI agents:**
+All code generation and refactoring must strictly follow this context and the architectural guidelines above.
+Never introduce anti-patterns or deviate from modern Android/Kotlin best practices unless explicitly instructed.

@@ -177,8 +177,9 @@ object AiModule {
     @Singleton
     fun provideAIAssistantService(
         aiServiceApi: AIServiceApi,
-        habitRepository: HabitRepository
+        habitRepository: HabitRepository,
+        userPreferencesRepository: UserPreferencesRepository
     ): AIAssistantService {
-        return AIAssistantServiceImpl(aiServiceApi, habitRepository)
+        return AIAssistantServiceImpl(aiServiceApi, habitRepository, userPreferencesRepository)
     }
 }
